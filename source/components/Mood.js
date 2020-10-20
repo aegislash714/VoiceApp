@@ -6,22 +6,43 @@ import { AntDesign } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons'; 
 import moment from 'moment';
 
+const STORAGE_KEY = '@save_name'
+
 export default function Mood() {
 
+  storeData = async (date, mood) => {
+      try {
+        console.log(date)
+        const jsonObject = {date, mood};
+        const jsonString = JSON.stringify(jsonObject);
+        await AsyncStorage.setItem(STORAGE_KEY, jsonString);
+      } catch (error) {}
+    };
+
+    retrieveData = async () => {
+      try {
+        const value = await AsyncStorage.getItem(STORAGE_KEY);
+        if (value !== null) {
+          console.log(value);
+        }
+      } catch (error) {
+      }
+    };
+
     let date = moment()
-      .format('DD HH');
+      .format("DD HH");
       console.log(date);
 
     const onPressHappy = () => {
-      console.log("nice!");
+      storeData(date, "happy");
     }
 
     const onPressNeutral = () => {
-      console.log("huh");
+      storeData(date, "neutral");
     }
 
     const onPressSad = () => {
-      console.log("oh");
+      storeData(date, "sad");
     }
 
     return (
