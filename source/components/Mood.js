@@ -4,24 +4,29 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Fontisto } from '@expo/vector-icons'; 
 import { AntDesign } from '@expo/vector-icons'; 
 import { Entypo } from '@expo/vector-icons'; 
+import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 
 const STORAGE_KEY = '@save_name'
 
-export default function Mood() {
+export default function Mood({navigation}) {
 
-  storeData = async (date, mood) => {
+  const storeData = async (date, mood) => {
       try {
-        console.log(date)
-        const jsonObject = {date, mood};
-        const jsonString = JSON.stringify(jsonObject);
-        await AsyncStorage.setItem(STORAGE_KEY, jsonString);
+        // console.log(date)
+        // const jsonObject = {date, mood};
+        // const jsonString = JSON.stringify(jsonObject);
+        await AsyncStorage.setItem(date, mood);
       } catch (error) {}
     };
 
-    retrieveData = async () => {
+    const clearData = async () => {
+      AsyncStorage.clear();
+    }
+
+    const retrieveData = async () => {
       try {
-        const value = await AsyncStorage.getItem(STORAGE_KEY);
+        const value = await AsyncStorage.getItem(date);
         if (value !== null) {
           console.log(value);
         }
@@ -29,20 +34,34 @@ export default function Mood() {
       }
     };
 
+    const showAllData = async () => {
+      AsyncStorage.getAllKeys((err, keys) => {
+        AsyncStorage.multiGet(keys, (error, stores) => {
+          stores.map((result, i, store) => {
+            console.log({ [store[i][0]]: store[i][1] });
+            return true;
+          });
+        });
+      });
+    }
+
     let date = moment()
-      .format("DD HH");
+      .format("DD/HH/yy");
       console.log(date);
 
     const onPressHappy = () => {
       storeData(date, "happy");
+      navigation.navigate("Graph");
     }
 
     const onPressNeutral = () => {
       storeData(date, "neutral");
+      navigation.navigate("Graph");
     }
 
     const onPressSad = () => {
       storeData(date, "sad");
+      navigation.navigate("Graph");
     }
 
     return (
@@ -60,6 +79,12 @@ export default function Mood() {
               <Fontisto name="neutral" size={38} color="purple" style={{height: 40}}/>
             </Pressable>
             <Pressable onPress={onPressSad} style={({ pressed }) => [ { opacity: pressed ? '0.5' : '1.0' }, styles.button ]}>
+              <Fontisto name="frowning" size={36} color="purple" style={{height: 38}}/>
+            </Pressable>
+            <Pressable onPress={showAllData} style={({ pressed }) => [ { opacity: pressed ? '0.5' : '1.0' }, styles.button ]}>
+              <Fontisto name="frowning" size={36} color="purple" style={{height: 38}}/>
+            </Pressable>
+            <Pressable onPress={clearData} style={({ pressed }) => [ { opacity: pressed ? '0.5' : '1.0' }, styles.button ]}>
               <Fontisto name="frowning" size={36} color="purple" style={{height: 38}}/>
             </Pressable>
           </View>
@@ -87,7 +112,7 @@ export default function Mood() {
 
     button: {
         alignItems: "center",
-        padding: 30,
+        padding: 10,
         borderRadius: 50
     },
 
