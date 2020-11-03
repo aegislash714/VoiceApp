@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "NewProject",
-    "slug": "NewProject",
+    "name": "NewProject 0.1",
+    "slug": "newproject01",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -21,6 +21,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "First version of mood app"
   }
 }

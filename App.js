@@ -22,18 +22,27 @@ const retrieveData = async (date) => {
 };
 
 let moodSubmitted = retrieveData(date); // either null or true
+console.log('moodSubmitted', moodSubmitted);
 
 function MyTabs() {
   // "Mood" if moodSubmitted else "Graph"
   return (
-    <Tab.Navigator
-      initialRouteName={"Mood" ? moodSubmitted : "Graph"}
-    >
-      <Tab.Screen name="Mood" component={Mood} />
-      <Tab.Screen name="Voice" component={Voice} />
-      <Tab.Screen name="Graph" component={Graph} />
-    </Tab.Navigator>
-  );
+  moodSubmitted
+  ?
+  <Tab.Navigator initialRouteName={"Graph"}>
+    <Tab.Screen name="Mood" component={Mood} />
+    <Tab.Screen name="Voice" component={Voice} />
+    <Tab.Screen name="Graph" component={Graph} />
+  </Tab.Navigator>
+  :
+  <Tab.Navigator initialRouteName={"Mood"}>
+    <Tab.Screen name="Mood" component={Mood} />
+    <Tab.Screen name="Voice" component={Voice} />
+    <Tab.Screen name="Graph" component={Graph} />
+  </Tab.Navigator>
+  )
+
+  // <Tab.Navigator initialRouteName={moodSubmitted ? "Graph" : "Mood"}> // does not work
 }
 
 const styles = StyleSheet.create({

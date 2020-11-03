@@ -7,8 +7,6 @@ import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import moment from 'moment';
 
-const STORAGE_KEY = '@save_name'
-
 export default function Mood({navigation}) {
 
   const storeData = async (date, mood) => {

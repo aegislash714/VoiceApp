@@ -8,12 +8,9 @@ export default function Graph({route, navigation}) {
     // Array / results = [3, 5, 4] happy, neutral, sad
     // happy = results[0], neutral = results[1], sad = results[2]
 
-    // const { updated } = route.params;
-
     const [finalData, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    // const [dataChanged, setDataChanged] = useState(updated);
-
+    const [dataChanged, setDataChanged] = useState(false);
 
     const showAllData = async () => {
       let data = {};
@@ -43,7 +40,14 @@ export default function Graph({route, navigation}) {
     }
 
     useEffect(() => {
+      console.log("routeParams", route.params, !!route.params);
+      setDataChanged(route.params ? !dataChanged : dataChanged); // true : false
+    }, []); // won't work, only running once
+
+    useEffect(() => {
       const fetchData = async () => {
+        setLoading(true);
+
         let counts = await count();
         const data = [
             {
@@ -69,14 +73,13 @@ export default function Graph({route, navigation}) {
             },
           ];
 
-        console.log(data);
+        // console.log(data);
         setData(data);
         setLoading(false);
       }
 
       fetchData();
-    }, []);
-    // }, [dataChanged]); // only run once
+    }, [dataChanged]); // only run when dataChanged updates
 
     return (
       loading
