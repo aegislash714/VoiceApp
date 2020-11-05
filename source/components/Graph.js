@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, Text, View, AsyncStorage, Dimensions } from 'react-native';
-import { LineChart, BarChart, PieChart, ProgressChart, ContributionGraph } from 'react-native-chart-kit'
+import { ActivityIndicator, StyleSheet, Text, View, AsyncStorage, Dimensions } from 'react-native';
+import { LineChart, BarChart, PieChart, ProgressChart, ContributionGraph } from 'react-native-chart-kit';
+import { useIsFocused } from '@react-navigation/native';
 
 export default function Graph({route, navigation}) {
     // Get final emotion at end of day
@@ -10,7 +11,7 @@ export default function Graph({route, navigation}) {
 
     const [finalData, setData] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [dataChanged, setDataChanged] = useState(false);
+    const isFocused = useIsFocused();
 
     const showAllData = async () => {
       let data = {};
@@ -38,11 +39,6 @@ export default function Graph({route, navigation}) {
       });
       return counts;
     }
-
-    useEffect(() => {
-      console.log("routeParams", route.params, !!route.params);
-      setDataChanged(route.params ? !dataChanged : dataChanged); // true : false
-    }, []); // won't work, only running once
 
     useEffect(() => {
       const fetchData = async () => {
@@ -79,13 +75,13 @@ export default function Graph({route, navigation}) {
       }
 
       fetchData();
-    }, [dataChanged]); // only run when dataChanged updates
+    }, [isFocused]); // only run when dataChanged updates
 
     return (
       loading
       ?
-      <View>
-        <Text>Loading...</Text>
+      <View style={styles.pieChart}>
+        <ActivityIndicator size="large" color="purple" />
       </View>
       :
       <View style={styles.pieChart}>

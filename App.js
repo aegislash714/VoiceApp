@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Image, StyleSheet, Button,  Text, View, AsyncStorage } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -21,24 +21,24 @@ const retrieveData = async (date) => {
   }
 };
 
-let moodSubmitted = retrieveData(date); // either null or true
-console.log('moodSubmitted', moodSubmitted);
-
 function MyTabs() {
-  // "Mood" if moodSubmitted else "Graph"
+  const [submitted, setSubmitted] = useState(retrieveData(date));
+
+  // useEffect(() => {
+  //   const wrapper = async () => {
+  //     let result = await retrieveData(date);
+  //     console.log("moodSubmitted", result);
+  //     setSubmitted(result); // true or false
+  //   }
+  //
+  //   wrapper();
+  // });
+
   return (
-  moodSubmitted
-  ?
-  <Tab.Navigator initialRouteName={"Graph"}>
-    <Tab.Screen name="Mood" component={Mood} />
-    <Tab.Screen name="Voice" component={Voice} />
-    <Tab.Screen name="Graph" component={Graph} />
-  </Tab.Navigator>
-  :
   <Tab.Navigator initialRouteName={"Mood"}>
     <Tab.Screen name="Mood" component={Mood} />
     <Tab.Screen name="Voice" component={Voice} />
-    <Tab.Screen name="Graph" component={Graph} />
+    <Tab.Screen name="Graph" component={Graph} options={{gestureDirection: "vertical"}}/>
   </Tab.Navigator>
   )
 
